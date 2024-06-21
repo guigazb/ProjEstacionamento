@@ -8,18 +8,10 @@ public class Moto extends Veiculo {
         this.cilindradas = cilindradas;
     }
 
-    public String getmarca(){
-        return this.marca;
-    }
-    public double getCilindradas(){
-        return this.cilindradas;
-    }
-
-    public void setmarca(String marca){
-        this.marca = marca;
-    }
-    public void setcilindradas(int cilindradas){
-        this.cilindradas = cilindradas;
-    }
+    public String getMarca() { return this.marca; }
+    public void setMarca(String marca) { this.marca = marca; }
+    
+    public double getCilindradas() { return this.cilindradas; }
+    public void setCilindradas(int cilindradas) { this.cilindradas = cilindradas; }
 
 }

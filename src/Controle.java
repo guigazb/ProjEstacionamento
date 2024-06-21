@@ -10,12 +10,12 @@ public class Controle {
         this.veiculo = veiculo;
         this.horarioEntrada = LocalDateTime.now();
         this.vaga = vaga;
-        vaga.setLivre(false);
+        vaga.setStatus("ocupada");
     }
 
     public void registrarSaida() {
         this.horarioSaida = LocalDateTime.now();
-        vaga.setLivre(true);
+        vaga.setStatus("livre");
     }
 
     public long calcularTempoPermanencia() { return java.time.Duration.between(horarioEntrada, horarioSaida).toMinutes(); }

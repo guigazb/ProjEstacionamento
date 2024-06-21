@@ -4,8 +4,7 @@ public abstract class Relatorio {
     public static void gerarRelatorio(List<Vaga> vagas) {
         System.out.println("Relatório:");
         for (Vaga vaga : vagas) {
-            String livre = (vaga.estaLivre()) ? "livre" : "ocupada";
-            System.out.println("Vaga " + vaga.getNumero() + ": " + livre);
+            System.out.println("Vaga " + vaga.getNumero() + ": " + vaga.getStatus());
         }
     }
 
