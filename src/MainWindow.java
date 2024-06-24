@@ -18,9 +18,9 @@ public class MainWindow {
     public static final int BUTTONHEIGHT = Math.max(HEIGHT / 30, 18);
     
     private static JFrame window;
-    private static Stack<JPanel> nxtScreens, prvScreens;
-    private static JPanel mainPanel, naviPanel;
+    private static Stack<Screen> nxtScreens, prvScreens;
     private static Screen currentPanel;
+    private static JPanel mainPanel, naviPanel;
     private static JButton nxtScreenButton, prvScreenButton;
 
     public static void run() {
@@ -50,8 +50,8 @@ public class MainWindow {
             nxtScreens.push(currentPanel);
             mainPanel.remove(currentPanel);
 
-            JPanel newScreen = prvScreens.pop();
-            currentPanel = (Screen)newScreen;
+            Screen newScreen = prvScreens.pop();
+            currentPanel = newScreen;
             mainPanel.add(currentPanel);
             mainPanel.revalidate();
             mainPanel.repaint();
@@ -63,8 +63,8 @@ public class MainWindow {
             prvScreens.push(currentPanel);
             mainPanel.remove(currentPanel);
 
-            JPanel newScreen = nxtScreens.pop();
-            currentPanel = (Screen)newScreen;
+            Screen newScreen = nxtScreens.pop();
+            currentPanel = newScreen;
             mainPanel.add(currentPanel);
             mainPanel.revalidate();
             mainPanel.repaint();
@@ -87,8 +87,8 @@ public class MainWindow {
     }
 
     private static void initializeComponents() {
-        nxtScreens = new Stack<>();
-        prvScreens = new Stack<>();
+        nxtScreens = new Stack<Screen>();
+        prvScreens = new Stack<Screen>();
 
         mainPanel = new JPanel(new CardLayout());
         setCurrentPanel(new MainScreen());

@@ -1,3 +1,4 @@
+import java.util.List;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -9,16 +10,17 @@ import java.util.Scanner;
 
 public abstract class Database {
     public static Cliente contaAtual = null;
-    private static ArrayList<Cliente> clientes = new ArrayList<>();
-    private static HashSet<String> emailsCadastrados = new HashSet<>();
-    private static ArrayList<Vaga> vagas = new ArrayList<>();
+    private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+    private static HashSet<String> emailsCadastrados = new HashSet<String>();
+    private static ArrayList<Vaga> vagas = new ArrayList<Vaga>();
 
     public static void iniciar() {
 
         // Lendo logins anteriores
         File flogins = new File("logins.txt");
         if (flogins.exists()) {
-            try (Scanner sc = new Scanner(flogins)) {
+            try {
+                Scanner sc = new Scanner(flogins);
                 while (sc.hasNextLine()) {
                     String nome = sc.nextLine();
                     String tel = sc.nextLine();
@@ -26,6 +28,28 @@ public abstract class Database {
                     String sen = sc.nextLine();
                     Cliente c = new Cliente(nome, tel, ema, sen);
                     cadastrarCliente(c);
+                    int nveiculos = Integer.parseInt(sc.nextLine());
+                    for (int i = 0; i < nveiculos; i++) {
+                        String placa = sc.nextLine();
+                        String tipo = sc.nextLine();
+                        if (tipo.equals("Carro")) {
+                            String cor = sc.nextLine();
+                            String marca = sc.nextLine();
+                            String modelo = sc.nextLine();
+                            Carro car = new Carro(placa, cor, marca, modelo);
+                            c.addVeiculo(car);
+                        } else if (tipo.equals("Moto")) {
+                            String marca = sc.nextLine();
+                            int cilindradas = Integer.parseInt(sc.nextLine());
+                            Moto m = new Moto(placa, marca, cilindradas);
+                            c.addVeiculo(m);
+                        } else if (tipo.equals("Caminhao")) {
+                            double cargaMaxima = Double.parseDouble(sc.nextLine());
+                            double comprimento = Double.parseDouble(sc.nextLine());
+                            Caminhao cam = new Caminhao(placa, cargaMaxima, comprimento);
+                            c.addVeiculo(cam);
+                        }
+                    }
                 }
                 sc.close();
             } catch (FileNotFoundException e) {
@@ -37,7 +61,8 @@ public abstract class Database {
         // Lendo dados de Vagas
         File fvagas = new File("vagas.txt");
         if (fvagas.exists()) {
-            try (Scanner sc = new Scanner(fvagas)) {
+            try {
+                Scanner sc = new Scanner(fvagas);
                 while (sc.hasNextLine()) {
                     int num = Integer.parseInt(sc.nextLine());
                     String loc = sc.nextLine();
@@ -58,6 +83,7 @@ public abstract class Database {
         File flogins = new File("logins.txt");
         if (flogins.exists()) { flogins.delete(); }
 
+        // Escrevendo dados de cada login
         try {
             flogins.createNewFile();
             Writer w = new FileWriter(flogins);
@@ -66,6 +92,30 @@ public abstract class Database {
                 w.write(c.getTelefone() + '\n');
                 w.write(c.getEmail() + '\n');
                 w.write(c.getSenha() + '\n');
+
+                // Escrevendo os veiculos para cada cliente
+                List<Veiculo> veiculos = c.getVeiculos();
+                w.write(String.valueOf(veiculos.size()) + '\n');
+                for (Veiculo v : veiculos) {
+                    w.write(v.getPlaca() + '\n');
+                    String tipo = v.getTipo();
+                    w.write(tipo + '\n');
+                    if (tipo.equals("Carro")) {
+                        Carro car = (Carro) v;
+                        w.write(car.getCor() + '\n');
+                        w.write(car.getMarca() + '\n');
+                        w.write(car.getModelo() + '\n');
+                    } else if (tipo.equals("Moto")) {
+                        Moto moto = (Moto) v;
+                        w.write(moto.getMarca() + '\n');
+                        w.write(String.valueOf(moto.getCilindradas()) + '\n');
+                    } else if (tipo.equals("Caminhao")) {
+                        Caminhao cam = (Caminhao) v;
+                        w.write(String.valueOf(cam.getCargaMaxima()) + '\n');
+                        w.write(String.valueOf(cam.getComprimento()) + '\n');
+                    }
+                }
+                
             }
             w.close();
         } catch (IOException e) {
@@ -75,6 +125,7 @@ public abstract class Database {
         File fvagas = new File("vagas.txt");
         if (fvagas.exists()) { fvagas.delete(); }
 
+        // Escrevendo os dados de cada vaga
         try {
             fvagas.createNewFile();
             Writer w = new FileWriter(fvagas);

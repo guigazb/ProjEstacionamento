@@ -6,3 +6,7 @@ Carro
 Bloco A
 livre
 Carro
+3
+Bloco A
+livre
+Carro

@@ -3,7 +3,7 @@ public class Caminhao extends Veiculo {
     private double comprimento;
 
     public Caminhao(String placa, double cargaMaxima, double comprimento) {
-        super(placa, "Caminhão");
+        super(placa, "Caminhao");
         this.cargaMaxima = cargaMaxima;
         this.comprimento = comprimento;
     }
