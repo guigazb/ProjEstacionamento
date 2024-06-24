@@ -4,9 +4,8 @@ import java.util.Scanner;
 
 public class Main {
     private static final ArrayList<String> opcoes = new ArrayList<>() {{
-        add("Cadastrar nova vaga");
-        add("Deletar vaga");
-        add("Sair");
+        add("Fechar Sistema");
+        add("Controle de Vagas");
     }};
 
     private static Scanner sc = new Scanner(System.in);
@@ -20,21 +19,58 @@ public class Main {
                 System.out.printf("\t%d. %s\n", i+1, opcoes.get(i));
             }
             int op = leInt("-> ");
+            
+            switch (op) {
+            case 1: // Fechar
+                Database.fechar();
+                System.exit(0);
+                break;
+
+            case 2: // Controle de Vagas
+                menuVagas();
+                break;
+
+            default:
+                System.out.println("Operaçao invalida!");
+            }
+        }
+    }
+
+    private static final ArrayList<String> menuVagasOpcoes = new ArrayList<>() {{
+        add("Voltar ao menu principal");
+        add("Cadastrar nova vaga");
+        add("Remover vaga");
+        add("Listar vagas existentes");
+    }};
+
+    private static void menuVagas() {
+        boolean r = true;
+        while (r) {
+            System.out.println("Controle de Vagas:");
+            for (int i = 0; i < menuVagasOpcoes.size(); i++) {
+                System.out.printf("\t%d. %s\n", i+1, menuVagasOpcoes.get(i));
+            }
+            int op = leInt("-> ");
 
             int num;
             String loc, veic;
             Vaga v;
-            
+
             switch (op) {
-            case 1:
+            case 1: // Voltar ao menu principal
+                r = false;
+                break;
+
+            case 2: // Cadastrar nova vaga
                 num = leInt("Insira o numero da vaga: ");
                 loc = leString("Insira a localizaçao da vaga: ");
                 veic = leString("Insira o tipo de veiculo: ");
                 v = new Vaga(num, loc, veic);
-                Database.addVaga(v);
+                if (Database.addVaga(v)) { System.out.println("Vaga adicionada com sucesso!"); }
+                else { System.out.println("A vaga adicionada ja existe!"); }
                 break;
 
-            case 2:
+            case 3: // Remover vaga
                 num = leInt("Insira o numero da vaga: ");
                 loc = leString("Insira a localizaçao da vaga a ser apagada: ");
                 v = Database.getVaga(num, loc);
@@ -45,12 +81,20 @@ public class Main {
                 }
                 break;
 
-            case 3:
-                Database.fechar();
-                System.exit(0);
+            case 4: // Listar vagas
+                int i = 1;
+                for (Vaga vaga : Database.getVagaList()) {
+                    System.out.printf("Vaga %d:\n", i);
+                    System.out.printf("\t- Numero: %d\n", vaga.getNumero());
+                    System.out.printf("\t- Localizaçao: %s\n", vaga.getLocalizacao());
+                    System.out.printf("\t- Status: %s\n", vaga.getStatus());
+                    System.out.printf("\t- Tipo de Veiculo: %s\n", vaga.getTipoVeiculo());
+                    i++;
+                }
                 break;
 
             default:
+                System.out.println("Operaçao invalida!");
             }
         }
     }

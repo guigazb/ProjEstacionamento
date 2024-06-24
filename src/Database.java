@@ -110,8 +110,10 @@ public abstract class Database {
         return null;
     }
 
-    public static void addVaga(Vaga v) {
+    public static boolean addVaga(Vaga v) {
+        if (getVaga(v.getNumero(), v.getLocalizacao()) != null) { return false; }
         vagas.add(v);
+        return true;
     }
 
     public static boolean rmvVaga(Vaga v) {
@@ -125,5 +127,9 @@ public abstract class Database {
             }
         }
         return null;
+    }
+
+    public static ArrayList<Vaga> getVagaList() {
+        return vagas;
     }
 }
