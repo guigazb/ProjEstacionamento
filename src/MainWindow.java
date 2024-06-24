@@ -9,39 +9,27 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Stack;
 
 public class MainWindow {
-    public static final int WIDTH = 600;
-    public static final int HEIGHT = 500;
-    public static final int BUTTONWIDTH = WIDTH / 10;
-    public static final int BUTTONHEIGHT = HEIGHT / 30;
+    public static final int WIDTH = 300;
+    public static final int HEIGHT = 300;
+    public static final int BUTTONWIDTH = Math.max(WIDTH / 10, 60);
+    public static final int BUTTONHEIGHT = Math.max(HEIGHT / 30, 18);
     
     private static JFrame window;
     private static Stack<JPanel> nxtScreens, prvScreens;
     private static JPanel mainPanel, naviPanel;
     private static Screen currentPanel;
     private static JButton nxtScreenButton, prvScreenButton;
-    public static Cliente contaAtual = null;
 
-    public static void main(String[] args) {
-        try {
-            Database.iniciar();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+    public static void run() {
         window = new JFrame("App Estacionamento");
         window.setSize(WIDTH, HEIGHT);
         window.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                try {
-                    Database.fechar();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
+                Database.fechar();
                 window.dispose();
                 System.exit(0);
             }

@@ -11,7 +11,7 @@ public class Moto extends Veiculo {
     public String getMarca() { return this.marca; }
     public void setMarca(String marca) { this.marca = marca; }
     
-    public double getCilindradas() { return this.cilindradas; }
+    public int getCilindradas() { return this.cilindradas; }
     public void setCilindradas(int cilindradas) { this.cilindradas = cilindradas; }
 
 }

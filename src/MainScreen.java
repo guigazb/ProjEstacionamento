@@ -14,7 +14,7 @@ public class MainScreen extends Screen {
     }
 
     private void inicializarBotoes() {
-        String nomeConta = (MainWindow.contaAtual == null) ? "Login" : MainWindow.contaAtual.getNome();
+        String nomeConta = (Database.contaAtual == null) ? "Login" : Database.contaAtual.getNome();
         bConta = new JButton(nomeConta);
         bConta.addActionListener(new ActionListener() {
             @Override
@@ -35,7 +35,7 @@ public class MainScreen extends Screen {
 
     @Override
     public void update() {
-        String nomeConta = (MainWindow.contaAtual == null) ? "Login" : MainWindow.contaAtual.getNome();
+        String nomeConta = (Database.contaAtual == null) ? "Login" : Database.contaAtual.getNome();
         this.bConta.setText(nomeConta);
     }
 }

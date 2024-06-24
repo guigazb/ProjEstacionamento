@@ -1,6 +1,7 @@
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,12 +10,13 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.xml.crypto.Data;
 
 public class LoginFrame extends JDialog implements ActionListener {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 400;
 
-    private JButton bLogin, bCadastrar;
+    private JButton bLogin, bCadastrar, bLogout;
     private JLabel lNome, lTelefone, lEmail, lSenha;
     private JLabel lAux1, lAux2;
     private JTextField tfNome, tfTelefone, tfEmail, tfSenha;
@@ -22,6 +24,7 @@ public class LoginFrame extends JDialog implements ActionListener {
     public LoginFrame(JFrame parent) {
         super(parent, "Login", true);
         this.setSize(WIDTH, HEIGHT);
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         inicializarComponentes();
@@ -43,18 +46,22 @@ public class LoginFrame extends JDialog implements ActionListener {
         tfSenha = new JTextField(20);
 
         bLogin = new JButton("Login");
+        bLogout = new JButton("Logout");
         bCadastrar = new JButton("Cadastrar");
 
         bLogin.addActionListener(this);
+        bLogout.addActionListener(this);
         bCadastrar.addActionListener(this);
 
         this.setLayout(new GridBagLayout());
+        
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.WEST;
         this.add(lAux1, gbc);
 
@@ -62,55 +69,59 @@ public class LoginFrame extends JDialog implements ActionListener {
         this.add(lAux2, gbc);
 
         gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.EAST;
+        gbc.anchor = GridBagConstraints.WEST;
 
         gbc.gridx = 0;
         gbc.gridy = 2;
         this.add(lNome, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
         this.add(tfNome, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.EAST;
         this.add(lTelefone, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
         this.add(tfTelefone, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 4;
-        gbc.anchor = GridBagConstraints.EAST;
         this.add(lEmail, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
         this.add(tfEmail, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 5;
-        gbc.anchor = GridBagConstraints.EAST;
         this.add(lSenha, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
         this.add(tfSenha, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 6;
-        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.anchor = GridBagConstraints.SOUTH;
         this.add(bLogin, gbc);
 
         gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.CENTER;
         this.add(bCadastrar, gbc);
+        
+        gbc.gridx = 2;
+        this.add(bLogout, gbc);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        Object src = e.getSource();
+        if (src == bLogout) {
+            if (Database.contaAtual == null) { return; } 
+            Database.contaAtual = null;
+            MainWindow.update();
+            new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Logout feito com sucesso!").throwScreen();
+            return;
+        }
         String email = tfEmail.getText();
         if (email.isBlank()) {
             new ThrowDialog(MainWindow.getFrame(), "Erro", "Email não pode estar vazio!").throwScreen();
@@ -122,14 +133,12 @@ public class LoginFrame extends JDialog implements ActionListener {
             new ThrowDialog(MainWindow.getFrame(), "Erro", "Senha não pode ser vazia!");
             return;
         }
-
-        Object src = e.getSource();
         if (src == bLogin) {
             Cliente c = new Cliente("", "", email, senha);
             Cliente log = Database.tentarLogin(c);
             if (log != null) {
                 new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Login feito com sucesso!").throwScreen();
-                MainWindow.contaAtual = log;
+                Database.contaAtual = log;
                 MainWindow.update();
                 return;
             }
@@ -151,7 +160,7 @@ public class LoginFrame extends JDialog implements ActionListener {
             Cliente c = new Cliente(nome, telefone, email, senha);
             if (Database.cadastrarCliente(c)) {
                 new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Cliente cadastrado com sucesso!").throwScreen();
-                MainWindow.contaAtual = c;
+                Database.contaAtual = c;
                 MainWindow.update();
                 return;
             }
