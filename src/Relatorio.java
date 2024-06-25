@@ -1,5 +1,3 @@
-import java.util.List;
-
 public abstract class Relatorio {
     public static void gerarRelatorio() {
         System.out.println("Relatório:");
