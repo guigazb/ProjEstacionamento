@@ -117,52 +117,52 @@ public class LoginFrame extends JDialog implements ActionListener {
             if (Database.contaAtual == null) { return; } 
             Database.contaAtual = null;
             MainWindow.update();
-            new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Logout feito com sucesso!").throwScreen();
+            new ThrowDialog("Sucesso!", "Logout feito com sucesso!").throwScreen();
             return;
         }
         String email = tfEmail.getText();
         if (email.isBlank()) {
-            new ThrowDialog(MainWindow.getFrame(), "Erro", "Email não pode estar vazio!").throwScreen();
+            new ThrowDialog("Erro", "Email não pode estar vazio!").throwScreen();
             return;
         }
 
         String senha = tfSenha.getText();
         if (senha.isBlank()) {
-            new ThrowDialog(MainWindow.getFrame(), "Erro", "Senha não pode ser vazia!");
+            new ThrowDialog("Erro", "Senha não pode ser vazia!");
             return;
         }
         if (src == bLogin) {
             Cliente c = new Cliente("", "", email, senha);
             Cliente log = Database.tentarLogin(c);
             if (log != null) {
-                new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Login feito com sucesso!").throwScreen();
+                new ThrowDialog("Sucesso!", "Login feito com sucesso!").throwScreen();
                 Database.contaAtual = log;
                 MainWindow.update();
                 return;
             }
-            new ThrowDialog(MainWindow.getFrame(), "Erro", "Conta não encontrada").throwScreen();
+            new ThrowDialog("Erro", "Conta não encontrada").throwScreen();
             return;
         } else if (src == bCadastrar) {
             String nome = tfNome.getText();
             if (nome.isBlank()) {
-                new ThrowDialog(MainWindow.getFrame(), "Erro", "Nome não pode estar vazio!").throwScreen();
+                new ThrowDialog("Erro", "Nome não pode estar vazio!").throwScreen();
                 return;
             }
 
             String telefone = tfTelefone.getText();
             if (telefone.isBlank()) {
-                new ThrowDialog(MainWindow.getFrame(), "Erro", "Telefone não pode estar vazio!").throwScreen();
+                new ThrowDialog("Erro", "Telefone não pode estar vazio!").throwScreen();
                 return;
             }
 
             Cliente c = new Cliente(nome, telefone, email, senha);
             if (Database.cadastrarCliente(c)) {
-                new ThrowDialog(MainWindow.getFrame(), "Sucesso!", "Cliente cadastrado com sucesso!").throwScreen();
+                new ThrowDialog("Sucesso!", "Cliente cadastrado com sucesso!").throwScreen();
                 Database.contaAtual = c;
                 MainWindow.update();
                 return;
             }
-            new ThrowDialog(MainWindow.getFrame(), "Erro", "Não foi possível cadastrar o cliente").throwScreen();
+            new ThrowDialog("Erro", "Não foi possível cadastrar o cliente").throwScreen();
             return;
         }
     }

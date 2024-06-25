@@ -15,8 +15,8 @@ public class ThrowDialog extends JDialog implements ActionListener {
     public static final int HEIGHT = 150;
     private JButton okButton;
 
-    public ThrowDialog(JFrame parent, String title, String msg) {
-        super(parent, title, true);
+    public ThrowDialog(String title, String msg) {
+        super(MainWindow.getFrame(), title, true);
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);

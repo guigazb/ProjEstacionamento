@@ -6,11 +6,16 @@ public class Pagamento {
     private String formaPagamento;
     private LocalDateTime horarioPagamento;
 
-    public Pagamento(Controle tempo, double valorPago, String formaPagamento) {
+    public Pagamento(Controle tempo, double valorPago, String formaPagamento, LocalDateTime horarioPagamento) {
         this.tempo = tempo;
         this.valorPago = valorPago;
         this.formaPagamento = formaPagamento;
-        this.horarioPagamento = LocalDateTime.now();
+        this.horarioPagamento = horarioPagamento;
+        Database.addPagamento(this);
+    }
+
+    public Pagamento(Controle tempo, double valorPago, String formaPagamento) {
+        new Pagamento(tempo, valorPago, formaPagamento, LocalDateTime.now());
     }
 
     public void emitirRecibo() {
@@ -24,5 +29,5 @@ public class Pagamento {
     public double getValorPago() { return valorPago; }
     public String getFormaPagamento() { return formaPagamento; }
     public LocalDateTime getHorarioPagamento() { return horarioPagamento; }
-    public Controle gettempo() { return tempo; }
+    public Controle getTempo() { return tempo; }
 }

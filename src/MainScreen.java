@@ -8,12 +8,12 @@ public class MainScreen extends Screen {
     private JButton bConta, bVagas;
     public MainScreen() {
         super();
-        inicializarBotoes();
+        inicializarComponentes();
         this.add(bConta, BorderLayout.NORTH);
         this.add(bVagas, BorderLayout.NORTH);
     }
 
-    private void inicializarBotoes() {
+    private void inicializarComponentes() {
         String nomeConta = (Database.contaAtual == null) ? "Login" : Database.contaAtual.getNome();
         bConta = new JButton(nomeConta);
         bConta.addActionListener(new ActionListener() {
@@ -27,7 +27,7 @@ public class MainScreen extends Screen {
         bVagas.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new ThrowDialog(MainWindow.getFrame(), ":(", "Faz isso nao amg, eu nao fiz essa parte ainda").throwScreen();;
+                MainWindow.setCurrentPanel(new VagasScreen());
             }
             
         });
@@ -35,7 +35,10 @@ public class MainScreen extends Screen {
 
     @Override
     public void update() {
-        String nomeConta = (Database.contaAtual == null) ? "Login" : Database.contaAtual.getNome();
-        this.bConta.setText(nomeConta);
+        if (Database.contaAtual != null) {
+            bConta.setText(Database.contaAtual.getNome());
+        }
+        this.revalidate();
+        this.repaint();
     }
 }

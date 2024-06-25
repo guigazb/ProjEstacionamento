@@ -21,7 +21,7 @@ public class MainWindow {
     private static Stack<Screen> nxtScreens, prvScreens;
     private static Screen currentPanel;
     private static JPanel mainPanel, naviPanel;
-    private static JButton nxtScreenButton, prvScreenButton;
+    private static JButton nxtScreenButton, refreshButton, prvScreenButton;
 
     public static void run() {
         window = new JFrame("App Estacionamento");
@@ -102,6 +102,16 @@ public class MainWindow {
             }
         });
 
+        refreshButton = new JButton("R");
+        refreshButton.setPreferredSize(new Dimension(BUTTONWIDTH, BUTTONHEIGHT));
+        refreshButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MainWindow.update();
+            }
+            
+        });
+
         prvScreenButton = new JButton("<");
         prvScreenButton.setPreferredSize(new Dimension(BUTTONWIDTH, BUTTONHEIGHT));
         prvScreenButton.addActionListener(new ActionListener() {
@@ -113,6 +123,7 @@ public class MainWindow {
 
         naviPanel = new JPanel();
         naviPanel.add(prvScreenButton);
+        naviPanel.add(refreshButton);
         naviPanel.add(nxtScreenButton);
     }
 

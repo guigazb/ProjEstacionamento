@@ -3,7 +3,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    private static final ArrayList<String> opcoes = new ArrayList<>() {{
+    private static final ArrayList<String> menuPrincipalOpcoes = new ArrayList<>() {{
         add("Fechar Sistema");
         add("Controle de Vagas");
     }};
@@ -15,8 +15,8 @@ public class Main {
 
         while (true) {
             System.out.println("Escolha uma opcao abaixo: ");
-            for (int i = 0; i < opcoes.size(); i++) {
-                System.out.printf("\t%d. %s\n", i+1, opcoes.get(i));
+            for (int i = 0; i < menuPrincipalOpcoes.size(); i++) {
+                System.out.printf("\t%d. %s\n", i+1, menuPrincipalOpcoes.get(i));
             }
             int op = leInt("-> ");
             
@@ -30,6 +30,7 @@ public class Main {
                 menuVagas();
                 break;
 
+            // TODO: Relatorio Diario e Historico
             default:
                 System.out.println("Operaçao invalida!");
             }

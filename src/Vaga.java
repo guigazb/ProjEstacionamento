@@ -2,7 +2,7 @@ public class Vaga {
     private int numero;
     private String localizacao;
     private String status;
-    private String tipoVeiculo; 
+    private String tipoVeiculo;
 
     public Vaga(int numero, String localizacao, String tipoVeiculo) {
         this.numero = numero;

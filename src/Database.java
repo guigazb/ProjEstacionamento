@@ -8,11 +8,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
+// TODO: arquivo para guardar pagamentos
 public abstract class Database {
     public static Cliente contaAtual = null;
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
     private static HashSet<String> emailsCadastrados = new HashSet<String>();
     private static ArrayList<Vaga> vagas = new ArrayList<Vaga>();
+    private static ArrayList<Controle> vagasOcupadas = new ArrayList<Controle>();
+    private static ArrayList<Pagamento> historicoDePagamentos = new ArrayList<Pagamento>();
 
     public static void iniciar() {
 
@@ -180,7 +183,28 @@ public abstract class Database {
         return null;
     }
 
+
+
     public static ArrayList<Vaga> getVagaList() {
         return vagas;
+    }
+
+    public static void ocuparVaga(Vaga va, Veiculo veic) {
+        if (!va.getStatus().equals("livre")) {
+            new ThrowDialog("Erro", "Vaga nao esta livre para ser ocupada").throwScreen();
+            return;
+        } else if (!va.getTipoVeiculo().equals(veic.getTipo())) {
+            new ThrowDialog("Erro", "Esse veiculo nao pode ocupar essa vaga").throwScreen();
+            return;
+        }
+        vagasOcupadas.add(new Controle(veic, va));
+    }
+
+    public static ArrayList<Pagamento> getHistoricoDePagamentos() {
+        return historicoDePagamentos;
+    }
+
+    public static void addPagamento(Pagamento p) {
+        historicoDePagamentos.add(p);
     }
 }
