@@ -9,11 +9,9 @@ import javax.swing.JButton;
 public class VagasScreen extends Screen {
 
     private HashMap<JButton, Vaga> bVagas;
-    private VagasScreen aux;
     public VagasScreen() {
         super();
         bVagas = null;
-        aux = this;
         inicializarComponentes();
     }
 
@@ -34,7 +32,7 @@ public class VagasScreen extends Screen {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     Vaga vPressionada = bVagas.get(button);
-                    new VagaOptionsDialog(aux, vPressionada).throwScreen();
+                    new VagaOptionsDialog(vPressionada).throwScreen();
                 }
             });
             bVagas.put(button, v);

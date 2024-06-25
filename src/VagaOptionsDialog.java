@@ -1,6 +1,4 @@
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,11 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
-/*
-pressionada.getLocalizacao() + 
-": " + String.valueOf(pressionada.getNumero()) + " (" + pressionada.getTipoVeiculo() +
-" | " + pressionada.getStatus()
-*/
+
 public class VagaOptionsDialog extends JDialog {
     public static final int WIDTH = 300;
     public static final int HEIGHT = 150;
@@ -23,14 +17,12 @@ public class VagaOptionsDialog extends JDialog {
     private JButton bOcupar;
     private JPanel buttonPanel;
     private VagaOptionsDialog aux;
-    private VagasScreen vagaScreen;
     private Vaga pressionada;
     private JLabel txt;
 
-    public VagaOptionsDialog(VagasScreen vagaScreen, Vaga pressionada) {
+    public VagaOptionsDialog(Vaga pressionada) {
         super(MainWindow.getFrame(), "Escolha uma opcao");
         aux = this;
-        this.vagaScreen = vagaScreen;
         this.pressionada = pressionada;
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
