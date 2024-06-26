@@ -1,30 +1,33 @@
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
-import java.util.Map.Entry;
 
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 public class VagasScreen extends Screen {
 
     private HashMap<JButton, Vaga> bVagas;
+    private JScrollPane scroll;
+    private JPanel panel;
+
     public VagasScreen() {
         super();
-        bVagas = null;
+        bVagas = new HashMap<>();
+        panel = new JPanel(new GridLayout(0, 1, 10, 10));
+        scroll = new JScrollPane(panel);
+        this.setLayout(new GridLayout(1, 1));
+        this.add(scroll);
         inicializarComponentes();
     }
 
     
     public void inicializarComponentes() {
-        if (bVagas == null) {
-            bVagas = new HashMap<JButton, Vaga>();
-        } else {
-            for (Entry<JButton, Vaga> entry : bVagas.entrySet()) {
-                this.remove(entry.getKey());
-            }
-            bVagas.clear();
-        }
-        
+        panel.removeAll();
+        bVagas.clear();
+
         for (Vaga v : Database.getVagaList()) {
             JButton button = new JButton(v.getLocalizacao() + ": " + v.getNumero());
             button.addActionListener(new ActionListener() {
@@ -35,8 +38,11 @@ public class VagasScreen extends Screen {
                 }
             });
             bVagas.put(button, v);
-            this.add(button);
+            panel.add(button);
         }
+
+        panel.revalidate();
+        panel.repaint();
     }
 
     public void reservarVaga(Vaga v) {

@@ -5,12 +5,13 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 public class MainScreen extends Screen {
-    private JButton bConta, bVagas;
+    private JButton bConta, bVagas, bVeiculos;
     public MainScreen() {
         super();
         inicializarComponentes();
         this.add(bConta, BorderLayout.NORTH);
         this.add(bVagas, BorderLayout.NORTH);
+        this.add(bVeiculos, BorderLayout.NORTH);
     }
 
     private void inicializarComponentes() {
@@ -19,7 +20,7 @@ public class MainScreen extends Screen {
         bConta.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new LoginFrame(MainWindow.getFrame());
+                new LoginDialog();
             }
         });
 
@@ -28,6 +29,19 @@ public class MainScreen extends Screen {
             @Override
             public void actionPerformed(ActionEvent e) {
                 MainWindow.setCurrentPanel(new VagasScreen());
+            }
+            
+        });
+
+        bVeiculos = new JButton("Veiculos");
+        bVeiculos.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (Database.contaAtual == null) {
+                    new ThrowDialog("Erro", "Voce deve estar logado para acessar esta funcao").throwScreen();
+                    return;
+                }
+                MainWindow.setCurrentPanel(new VeiculosScreen());
             }
             
         });

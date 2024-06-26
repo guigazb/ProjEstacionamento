@@ -76,6 +76,7 @@ public class MainWindow {
             prvScreens.push(currentPanel);
             mainPanel.remove(currentPanel);
         }
+        nxtScreens.clear();
         mainPanel.add(p);
         currentPanel = p;
         mainPanel.revalidate();

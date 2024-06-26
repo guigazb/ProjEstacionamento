@@ -6,11 +6,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class LoginFrame extends JDialog implements ActionListener {
+public class LoginDialog extends JDialog implements ActionListener {
     public static final int WIDTH = 400;
     public static final int HEIGHT = 400;
 
@@ -19,8 +18,8 @@ public class LoginFrame extends JDialog implements ActionListener {
     private JLabel lAux1, lAux2;
     private JTextField tfNome, tfTelefone, tfEmail, tfSenha;
 
-    public LoginFrame(JFrame parent) {
-        super(parent, "Login", true);
+    public LoginDialog() {
+        super(MainWindow.getFrame(), "Login", true);
         this.setSize(WIDTH, HEIGHT);
         this.setResizable(false);
         this.setLocationRelativeTo(null);
@@ -116,6 +115,7 @@ public class LoginFrame extends JDialog implements ActionListener {
         if (src == bLogout) {
             if (Database.contaAtual == null) { return; } 
             Database.contaAtual = null;
+            Database.veiculoEscolhido = null;
             MainWindow.update();
             new ThrowDialog("Sucesso!", "Logout feito com sucesso!").throwScreen();
             return;
@@ -124,6 +124,8 @@ public class LoginFrame extends JDialog implements ActionListener {
         if (email.isBlank()) {
             new ThrowDialog("Erro", "Email não pode estar vazio!").throwScreen();
             return;
+        } else if (email.equals(Database.CLIENTENAOREGISTRADO)) {
+            new ThrowDialog("Erro", "Nao foi possivel cadastrar cliente");
         }
 
         String senha = tfSenha.getText();
@@ -137,6 +139,7 @@ public class LoginFrame extends JDialog implements ActionListener {
             if (log != null) {
                 new ThrowDialog("Sucesso!", "Login feito com sucesso!").throwScreen();
                 Database.contaAtual = log;
+                Database.veiculoEscolhido = null;
                 MainWindow.update();
                 return;
             }
@@ -159,6 +162,7 @@ public class LoginFrame extends JDialog implements ActionListener {
             if (Database.cadastrarCliente(c)) {
                 new ThrowDialog("Sucesso!", "Cliente cadastrado com sucesso!").throwScreen();
                 Database.contaAtual = c;
+                Database.veiculoEscolhido = null;
                 MainWindow.update();
                 return;
             }

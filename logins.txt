@@ -2,4 +2,22 @@ nome123
 1234-5678
 email@email.com
 12345
-0
+2
+12345
+Carro
+Vermelho
+Gol
+2022
+239393
+Moto
+Hyundai
+123
+Joao
+1238974
+meuemail@gmail.com
+minhasenha123
+1
+1231243
+Moto
+Marca de Moto Generica
+100000

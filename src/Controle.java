@@ -20,6 +20,7 @@ public class Controle {
 
     public long calcularTempoPermanencia() { return java.time.Duration.between(horarioEntrada, horarioSaida).toMinutes(); }
 
+    public double valorAPagar() { return (calcularTempoPermanencia() * Database.REAISPORMINUTO); }
     public Veiculo getVeiculo() { return veiculo; }
     public LocalDateTime getHorarioEntrada() { return horarioEntrada; }
     public LocalDateTime getHorarioSaida() { return horarioSaida; }

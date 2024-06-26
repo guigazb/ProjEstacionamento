@@ -3,10 +3,17 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Main {
-    private static final ArrayList<String> menuPrincipalOpcoes = new ArrayList<>() {{
-        add("Fechar Sistema");
-        add("Controle de Vagas");
-    }};
+    // TODO: relatorio de ocupacao
+    // TODO: permitir consulta de entrada e saida de veiculos
+    // TODO: permitir consulta e atualizacao dos dados dos clientes
+    // TODO: sistema de reservamento para reservar uma vaga em um dado horario e nao permitir que ela seja ocupada ate la e depois liberala
+    // TODO: rezar
+    // TODO: rezar MUITO
+    private static final String[] menuPrincipalOpcoes = {
+        "Fechar Sistema",
+        "Controle de Vagas",
+        "Relatorio de Pagamentos"
+    };
 
     private static Scanner sc = new Scanner(System.in);
     public static void main(String[] args) {
@@ -15,8 +22,8 @@ public class Main {
 
         while (true) {
             System.out.println("Escolha uma opcao abaixo: ");
-            for (int i = 0; i < menuPrincipalOpcoes.size(); i++) {
-                System.out.printf("\t%d. %s\n", i+1, menuPrincipalOpcoes.get(i));
+            for (int i = 0; i < menuPrincipalOpcoes.length; i++) {
+                System.out.printf("\t%d. %s\n", i+1, menuPrincipalOpcoes[i]);
             }
             int op = leInt("-> ");
             
@@ -30,26 +37,29 @@ public class Main {
                 menuVagas();
                 break;
 
-            // TODO: Relatorio Diario e Historico
+            case 3: // Relatorio de Pagamentos
+                menuRelatorioPagamentos();
+                break;
+
             default:
                 System.out.println("Operaçao invalida!");
             }
         }
     }
 
-    private static final ArrayList<String> menuVagasOpcoes = new ArrayList<>() {{
-        add("Voltar ao menu principal");
-        add("Cadastrar nova vaga");
-        add("Remover vaga");
-        add("Listar vagas existentes");
-    }};
+    private static final String[] menuVagasOpcoes = {
+        "Voltar ao menu principal",
+        "Cadastrar nova vaga",
+        "Remover vaga",
+        "Listar vagas existentes"
+    };
 
     private static void menuVagas() {
         boolean r = true;
         while (r) {
             System.out.println("Controle de Vagas:");
-            for (int i = 0; i < menuVagasOpcoes.size(); i++) {
-                System.out.printf("\t%d. %s\n", i+1, menuVagasOpcoes.get(i));
+            for (int i = 0; i < menuVagasOpcoes.length; i++) {
+                System.out.printf("\t%d. %s\n", i+1, menuVagasOpcoes[i]);
             }
             int op = leInt("-> ");
 
@@ -96,6 +106,63 @@ public class Main {
 
             default:
                 System.out.println("Operaçao invalida!");
+            }
+        }
+    }
+
+    private static final String[] menuRelatorioOpcoes = {
+        "Voltar ao menu principal",
+        "Gerar relatorio Historico",
+        "Gerar relatorio Diario"
+    };
+
+    private static void menuRelatorioPagamentos() {
+        boolean r = true;
+        while (r) {
+            System.out.println("Menu Relatorio:");
+            for (int i = 0; i < menuRelatorioOpcoes.length; i++) {
+                System.out.printf("\t%d. %s\n", i+1, menuRelatorioOpcoes[i]);
+            }
+
+            int op = leInt("-> ");
+            ArrayList<Pagamento> pags;
+            double total;
+            int i;
+
+            switch (op) {
+            case 1: // Menu Principal
+                r = false;
+                break;
+            case 2: // Historico
+                pags = Database.getHistoricoDePagamentos();
+                i = 1;
+                total = 0;
+                for (Pagamento p : pags) {
+                    System.out.printf("Pagamento %d\n", i);
+                    System.out.printf("\t- Valor: R$%f\n", (float)p.getValorPago());
+                    System.out.printf("\t- Forma de Pagamento: %s\n", p.getFormaPagamento());
+                    System.out.printf("\t- Horario de Pagamento: %s\n", p.getHorarioPagamento().toString());
+                    total += p.getValorPago();
+                    i++;
+                }
+                System.out.printf("Total Arrecadado: R$%f\n", (float)total);
+                break;
+            case 3: // Diario
+                pags = Database.getPagamentosDiario();
+                i = 1;
+                total = 0;
+                for (Pagamento p : pags) {
+                    System.out.printf("Pagamento %d\n", i);
+                    System.out.printf("\t- Valor: R$%f\n", (float)p.getValorPago());
+                    System.out.printf("\t- Forma de Pagamento: %s\n", p.getFormaPagamento());
+                    System.out.printf("\t- Horario de Pagamento: %s\n", p.getHorarioPagamento().toString());
+                    total += p.getValorPago();
+                    i++;
+                }
+                System.out.printf("Total Arrecadado: R$f\n", (float)total);
+                break;
+            default: 
+                System.out.println("Operacao invalida!");
             }
         }
     }

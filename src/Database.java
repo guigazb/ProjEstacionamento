@@ -4,13 +4,20 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
-// TODO: arquivo para guardar pagamentos
 public abstract class Database {
     public static Cliente contaAtual = null;
+    public static Veiculo veiculoEscolhido = null;
+
+    public static final String CLIENTENAOREGISTRADO = "Sem Conta";
+    public static final double REAISPORMINUTO = 1f;
+
     private static ArrayList<Cliente> clientes = new ArrayList<Cliente>();
     private static HashSet<String> emailsCadastrados = new HashSet<String>();
     private static ArrayList<Vaga> vagas = new ArrayList<Vaga>();
@@ -72,8 +79,33 @@ public abstract class Database {
                     String stat = sc.nextLine();
                     String veic = sc.nextLine();
                     Vaga v = new Vaga(num, loc, veic);
+                    if (!stat.equals("livre")) {
+                        String emailCl = sc.nextLine();
+                        v.setEmailClienteOcupando(emailCl);
+                    }
                     v.setStatus(stat);
                     vagas.add(v);
+                }
+                sc.close();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        File fpagamentos = new File("pagamentos.txt");
+        if (fpagamentos.exists()) {
+            try {
+                Scanner sc = new Scanner(fpagamentos);
+                while (sc.hasNextLine()) {
+                    double valPago = Double.parseDouble(sc.nextLine());
+                    String formaPagamento = sc.nextLine();
+                    int year = Integer.parseInt(sc.nextLine());
+                    int month = Integer.parseInt(sc.nextLine());
+                    int day = Integer.parseInt(sc.nextLine());
+                    int hour = Integer.parseInt(sc.nextLine());
+                    int minutes = Integer.parseInt(sc.nextLine());
+                    LocalDateTime ldt = LocalDateTime.of(LocalDate.of(year, month, day), LocalTime.of(hour, minutes));
+                    new Pagamento(valPago, formaPagamento, ldt);
                 }
                 sc.close();
             } catch (FileNotFoundException e) {
@@ -137,6 +169,29 @@ public abstract class Database {
                 w.write(v.getLocalizacao() + '\n');
                 w.write(v.getStatus() + '\n');
                 w.write(v.getTipoVeiculo() + '\n');
+                if (!v.getStatus().equals("livre")) {
+                    w.write(v.getEmailClienteOcupando() + '\n');
+                }
+            }
+            w.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        File fpagamentos = new File("pagamentos.txt");
+        if (fpagamentos.exists()) { fpagamentos.delete(); }
+
+        try {
+            fpagamentos.createNewFile();
+            Writer w = new FileWriter(fpagamentos);
+            for (Pagamento p : historicoDePagamentos) {
+                w.write(String.valueOf(p.getValorPago()) + '\n');
+                w.write(p.getFormaPagamento() + '\n');
+                w.write(String.valueOf(p.getHorarioPagamento().getYear()) + '\n');
+                w.write(String.valueOf(p.getHorarioPagamento().getMonthValue()) + '\n');
+                w.write(String.valueOf(p.getHorarioPagamento().getDayOfMonth()) + '\n');
+                w.write(String.valueOf(p.getHorarioPagamento().getHour()) + '\n');
+                w.write(String.valueOf(p.getHorarioPagamento().getSecond()) + '\n');
             }
             w.close();
         } catch (IOException e) {
@@ -164,6 +219,15 @@ public abstract class Database {
         return null;
     }
 
+    public static Cliente achaCliente(String email) {
+        for (Cliente c : clientes) {
+            if (c.getEmail().equals(email)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public static boolean addVaga(Vaga v) {
         if (getVaga(v.getNumero(), v.getLocalizacao()) != null) { return false; }
         vagas.add(v);
@@ -183,7 +247,27 @@ public abstract class Database {
         return null;
     }
 
+    public static void pagarVaga(Vaga v) {
+        Controle c = getControle(v);
+        if (c == null) { return; }
+        c.registrarSaida();
+        double valorAPagar = c.valorAPagar();
+        vagasOcupadas.remove(c);
+        new PagamentoDialog(valorAPagar, v).throwScreen();
+    }
 
+    public static Controle getControle(Vaga v) {
+        for (Controle c : vagasOcupadas) {
+            if (c.getVaga().equals(v)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    public static void reservarVaga(Vaga v) {
+        v.setStatus("reservada");
+    }
 
     public static ArrayList<Vaga> getVagaList() {
         return vagas;
@@ -202,6 +286,17 @@ public abstract class Database {
 
     public static ArrayList<Pagamento> getHistoricoDePagamentos() {
         return historicoDePagamentos;
+    }
+
+    public static ArrayList<Pagamento> getPagamentosDiario() {
+        ArrayList<Pagamento> diario = new ArrayList<Pagamento>();
+        LocalDate hoje = LocalDate.now();
+        int i = historicoDePagamentos.size() - 1;
+        while (i >= 0 && historicoDePagamentos.get(i).getHorarioPagamento().toLocalDate().isEqual(hoje)) {
+            diario.add(historicoDePagamentos.get(i));
+            i--;
+        }
+        return diario;
     }
 
     public static void addPagamento(Pagamento p) {

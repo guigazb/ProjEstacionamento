@@ -18,3 +18,23 @@ Carro
 Bloco A
 livre
 Carro
+6
+Bloco A
+livre
+Carro
+7
+Bloco A
+livre
+Carro
+8
+Bloco A
+livre
+Carro
+9
+Bloco A
+livre
+Moto
+10
+Bloco A
+livre
+Caminhao
