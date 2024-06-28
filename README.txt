@@ -19,6 +19,11 @@ funcionamento:
   - reserva de vagas - caminhão
   - pagamentos utilizando os meios de pagamento sugeridos (dinheiro,pix, cartão)
   - desocupação da vaga e consequente reocupação por outros veiculos
+-principais classe:
+ - main: conecta todas partes do código, em especial, a interface
+ - database: gerencia todos os dados gerados durante a execução do programa
+ - classes moto, carro , caminhão e cliente: definem quais são os parametros de cada parte do programa
+ - classes screen/dialog: auxiliam o sistema de interface gráfica 
 
 execução:
 - o sistema é executado sobre ambientes que suportem versões recentes do JDK (java development kit), seja uma IDE própria (vscode,intelij,eclipse,etc..) ou 
