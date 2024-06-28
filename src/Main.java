@@ -7,8 +7,7 @@ public class Main {
     // TODO: permitir consulta de entrada e saida de veiculos
     // TODO: permitir consulta e atualizacao dos dados dos clientes
     // TODO: sistema de reservamento para reservar uma vaga em um dado horario e nao permitir que ela seja ocupada ate la e depois liberala
-    // TODO: rezar
-    // TODO: rezar MUITO
+
     private static final String[] menuPrincipalOpcoes = {
         "Fechar Sistema",
         "Controle de Vagas",
